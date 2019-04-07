@@ -31,7 +31,13 @@ int main() {
 	cout<< str_list.front()<< std::endl << str_list.back() <<std::endl;
 	cout<<" Size: "<< str_list.size() << std::endl;
 
-	MyClass my_class(1);
+
+	mtl::List<const char*>::iterator it;
+	for( it = str_list.begin(); it.end() ; it++ ){
+		cout<<"\n\n"<< *it;
+	}
+
+	/**MyClass my_class(1);
 	mtl::List<MyClass> int_list;
 	int_list.push_back( my_class );
 	my_class.value_= 10;
@@ -40,7 +46,7 @@ int main() {
 	int_list.push_back( my_class );
 	cout<< int_list.front()<< std::endl << int_list.back() <<std::endl;
 	cout<<" Size: "<< int_list.size() << std::endl;
-
+	**/
 
 	return 0;
 }
