@@ -8,7 +8,10 @@
 
 #include <iostream>
 #include <string>
-#include "list.hpp"
+#include<list>
+
+#include "lorenz_machine.hpp"
+#include "circular_list.hpp"
 using namespace std;
 
 struct MyClass {
@@ -24,18 +27,27 @@ int main() {
 
 
 
-	mtl::List<const char*> str_list;
+	mtl::CircularList<const char*> str_list;
 	str_list.push_front( "Liverpool" );
 	str_list.push_front( "Football" );
 	str_list.push_back( "Club" );
 	cout<< str_list.front()<< std::endl << str_list.back() <<std::endl;
 	cout<<" Size: "<< str_list.size() << std::endl;
+	mtl::CircularList<const char*>::iterator it = str_list.begin();
+	for( int i = 0; i<10; ++i){
+		cout<< *it<<endl;
+		it++;
 
-
-	mtl::List<const char*>::iterator it;
-	for( it = str_list.begin(); it.end() ; it++ ){
-		cout<<"\n\n"<< *it;
 	}
+	cout<< "\n\n";
+	str_list.erase( str_list.end(), ++str_list.begin() );
+	it = str_list.begin();
+	for( int i = 0; i<10; ++i){
+		cout<<*it<<endl;
+		it++;
+	}
+
+	lm::LorenzMachine lorenz_machine;
 
 	/**MyClass my_class(1);
 	mtl::List<MyClass> int_list;

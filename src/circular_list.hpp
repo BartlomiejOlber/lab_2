@@ -1,12 +1,12 @@
 /*
- * list.hpp
+ * CircularList.hpp
  *
  *  Created on: Apr 7, 2019
  *      Author: bartlomiej
  */
 
-#ifndef LIST_HPP_
-#define LIST_HPP_
+#ifndef _CIRCULAR_LIST_HPP_
+#define _CIRCULAR_LIST_HPP_
 
 #include <exception>
 #include <iterator>
@@ -14,7 +14,7 @@
 namespace mtl{
 
 template<typename T>
-class List {
+class CircularList {
 
 public:
 	typedef T value_type;
@@ -35,16 +35,14 @@ private:
 	Node* tail_;
 	int size_;
 	void add( const_reference value, Node** nodeptr );
+	Node* del( Node* node );
 
 public:
-	class iterator : public std::iterator<std::forward_iterator_tag, Node> {
+	struct iterator : public std::iterator<std::forward_iterator_tag, Node> {
 			Node* node_;
-			int pos_;
-			int max_pos_;
-		public:
-			iterator() : node_(nullptr), pos_(0), max_pos_( size_ ){};
-			explicit iterator( Node* node ) : node_(node), pos_(0), max_pos_( size_ ) {};
-			iterator( const iterator& right_iterator ) : node_( right_iterator.node_ ),  pos_(0), max_pos_( size_ ) {};
+			iterator() : node_(nullptr){};
+			explicit iterator( Node* node ) : node_(node){};
+			iterator( const iterator& right_iterator ) : node_( right_iterator.node_ ) {};
 			iterator& operator= ( const iterator& right_iterator ) { //todo: return const iterator
 				node_ = right_iterator.node_;
 				return *this;
@@ -53,7 +51,6 @@ public:
 		    {
 		        if( node_ ){
 		        	node_ = node_->next;
-		        	pos_++;
 		        }
 		        return *this;
 		    }
@@ -63,7 +60,6 @@ public:
 		    	iterator tmp(*this);
 		    	if( node_ ){
 		        	node_ = node_->next;
-		        	pos_++;
 		        }
 		        return tmp;
 		    }
@@ -96,27 +92,27 @@ public:
 		};
 
 public:
-	List() : head_(nullptr), tail_( nullptr ), size_(0) {};
-	~List();
+	CircularList() : head_(nullptr), tail_( nullptr ), size_(0) {};
+	~CircularList();
 	int size() const { return size_;}
 	void push_back( const_reference value ) { add( value, &tail_ ); };
 	void pop();
 	void push_front( const_reference value ) { add( value, &head_ ); };
-	const_reference front() const { if( !head_ ) throw std::logic_error( "empty list"); return *(head_->value); };
-	reference front() { if( !head_ ) throw std::logic_error( "empty list"); return *(head_->value); };
-	const_reference back() const { if( !tail_ ) throw std::logic_error( "empty list"); return *(tail_->value); };
-	reference back() { if( !tail_ ) throw std::logic_error( "empty list"); return *(tail_->value); };
+	const_reference front() const { if( !head_ ) throw std::logic_error( "empty CircularList"); return *(head_->value); };
+	reference front() { if( !head_ ) throw std::logic_error( "empty CircularList"); return *(head_->value); };
+	const_reference back() const { if( !tail_ ) throw std::logic_error( "empty CircularList"); return *(tail_->value); };
+	reference back() { if( !tail_ ) throw std::logic_error( "empty CircularList"); return *(tail_->value); };
 	iterator erase( iterator position);
 	iterator erase( iterator first, iterator last);
-	iterator begin() {  return iterator( head_ ); };
-	iterator end()
-	};
+	iterator begin() const {  return iterator( head_ ); };
+	iterator end() const { return iterator( tail_ ); };
+
 };
 
 template<typename T>
-void List<T>::add( List<T>::const_reference value, List<T>::Node** nodeptr )
+void CircularList<T>::add( CircularList<T>::const_reference value, CircularList<T>::Node** nodeptr )
 {
-	List<T>::Node* new_node = new List<T>::Node( value );
+	CircularList<T>::Node* new_node = new CircularList<T>::Node( value );
 	if( *nodeptr ) {
 		new_node->next = head_;
 		tail_->next = new_node;
@@ -129,35 +125,68 @@ void List<T>::add( List<T>::const_reference value, List<T>::Node** nodeptr )
 	++size_;
 }
 
-/**template<typename T>
-List<T>::iterator List<T>::erase( iterator position )
-{
-	iterator it = begin();
-	do{
-		if(){
-			it ==
-		}
-		++it;
-	}while( it != end() );
-
-
-}
-**/
 template<typename T>
-void List<T>::pop()
+typename CircularList<T>::Node* CircularList<T>::del(  CircularList<T>::Node* node )
+{
+	Node* it = node;
+	Node* tmp = it->next;
+	it->next = tmp->next;
+	delete tmp;
+	--size_;
+	return it;
+}
+
+template<typename T>
+typename CircularList<T>::iterator CircularList<T>::erase( CircularList<T>::iterator position )
+{
+	if( head_ == position.node_ ){
+		pop();
+		return begin();
+	}
+	Node* it = head_;
+	if( tail_ == position.node_ ){
+		for( ;it->next!=tail_; it = it->next){}
+		tail_ = del(it);
+		return begin();
+
+	}
+	do{
+		if( it->next == position.node_ ){
+			it = del(it);
+			return iterator( it->next);
+		}
+		it = it->next;
+	}while( it != tail_ );
+	return iterator( tail_ );
+}
+
+template<typename T>
+typename CircularList<T>::iterator CircularList<T>::erase( CircularList<T>::iterator first, CircularList<T>::iterator last )
+{
+	CircularList<T>::iterator it = first;
+	while( it!=last ){
+		it = erase( it );
+	}
+	return last;
+}
+
+template<typename T>
+void CircularList<T>::pop()
 {
 	if( !head_ )
 		return;
 	tail_->next = head_->next;
 	delete head_;
+	head_ = tail_->next;
+	--size_;
 }
 
 template<typename T>
-List<T>::~List()
+CircularList<T>::~CircularList()
 {
 	if( !head_ )
 		return;
-	List<T>::Node* tmp = head_;
+	CircularList<T>::Node* tmp = head_;
 	tail_->next = nullptr;
 	while( tmp ){
 		head_ = tmp->next;
@@ -168,4 +197,4 @@ List<T>::~List()
 
 }//end namespace
 
-#endif /* LIST_HPP_ */
+#endif /* _CIRCULAR_LIST_HPP_ */

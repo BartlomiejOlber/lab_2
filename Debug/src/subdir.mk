@@ -4,13 +4,19 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
-../src/lab_2.cpp 
+../src/ita2_converter.cpp \
+../src/lab_2.cpp \
+../src/wheel_system.cpp 
 
 OBJS += \
-./src/lab_2.o 
+./src/ita2_converter.o \
+./src/lab_2.o \
+./src/wheel_system.o 
 
 CPP_DEPS += \
-./src/lab_2.d 
+./src/ita2_converter.d \
+./src/lab_2.d \
+./src/wheel_system.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes
