@@ -27,7 +27,7 @@ int main() {
 
 
 
-	mtl::CircularList<const char*> str_list;
+	/**mtl::CircularList<const char*> str_list;
 	str_list.push_front( "Liverpool" );
 	str_list.push_front( "Football" );
 	str_list.push_back( "Club" );
@@ -46,8 +46,10 @@ int main() {
 		cout<<*it<<endl;
 		it++;
 	}
+	**/
 
 	lm::LorenzMachine lorenz_machine;
+	lm::WheelSystem wheels;
 
 	/**MyClass my_class(1);
 	mtl::List<MyClass> int_list;

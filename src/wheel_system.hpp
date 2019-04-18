@@ -9,7 +9,7 @@
 #define WHEEL_SYSTEM_HPP_
 
 #include <array>
-#include <bitset>
+#include "circular_list.hpp"
 #include <map>
 
 namespace lm {
@@ -20,7 +20,7 @@ public:
 	typedef std::array<int,12> WheelsPosition;
 	typedef std::array<char,12> WheelsPositionCode;
 
-	class ReadingTable {
+	class PositionTable {
 	private:
 		std::map<char, WheelsPosition > reading_table;
 
@@ -30,21 +30,21 @@ public:
 	};
 
 private:
-	static std::bitset<43> psi_1;
-	static std::bitset<47> psi_2;
-	static std::bitset<51> psi_3;
-	static std::bitset<53> psi_4;
-	static std::bitset<59> psi_5;
-	static std::bitset<37> mu_37;
-	static std::bitset<61> mu_61;
-	static std::bitset<41> chi_1;
-	static std::bitset<31> chi_2;
-	static std::bitset<29> chi_3;
-	static std::bitset<26> chi_4;
-	static std::bitset<23> chi_5;
+	static mtl::CircularList<char> psi_1;
+	static mtl::CircularList<char> psi_2;
+	static mtl::CircularList<char> psi_3;
+	static mtl::CircularList<char> psi_4;
+	static mtl::CircularList<char> psi_5;
+	static mtl::CircularList<char> mu_37;
+	static mtl::CircularList<char> mu_61;
+	static mtl::CircularList<char> chi_1;
+	static mtl::CircularList<char> chi_2;
+	static mtl::CircularList<char> chi_3;
+	static mtl::CircularList<char> chi_4;
+	static mtl::CircularList<char> chi_5;
 	static bool is_init;
 	static void init_wheels();
-	static ReadingTable reading_table;
+	static PositionTable position_table;
 
 
 public:
