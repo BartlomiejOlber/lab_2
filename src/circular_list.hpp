@@ -104,6 +104,7 @@ public:
 	reference back() { if( !tail_ ) throw std::logic_error( "empty CircularList"); return *(tail_->value); };
 	iterator erase( iterator position);
 	iterator erase( iterator first, iterator last);
+	iterator position( int position );
 	iterator begin() const {  return iterator( head_ ); };
 	iterator end() const { return iterator( tail_ ); };
 
@@ -168,6 +169,15 @@ typename CircularList<T>::iterator CircularList<T>::erase( CircularList<T>::iter
 		it = erase( it );
 	}
 	return last;
+}
+
+template<typename T>
+typename CircularList<T>::iterator CircularList<T>::position( int position )
+{
+	CircularList<T>::iterator it( head_ );
+	for( int i = 0; i<position; ++i)
+		++it;
+	return it;
 }
 
 template<typename T>

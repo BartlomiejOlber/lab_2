@@ -12,6 +12,7 @@
 #include<list>
 
 #include "lorenz_machine.hpp"
+#include "wheel_system.hpp"
 #include "ita2_converter.hpp"
 #include "circular_list.hpp"
 using namespace std;
@@ -27,45 +28,21 @@ std::ostream& operator<< ( std::ostream& strm, const MyClass& obj) { strm<< obj.
 
 int main() {
 
-
-
-	/**mtl::CircularList<const char*> str_list;
-	str_list.push_front( "Liverpool" );
-	str_list.push_front( "Football" );
-	str_list.push_back( "Club" );
-	cout<< str_list.front()<< std::endl << str_list.back() <<std::endl;
-	cout<<" Size: "<< str_list.size() << std::endl;
-	mtl::CircularList<const char*>::iterator it = str_list.begin();
-	for( int i = 0; i<10; ++i){
-		cout<< *it<<endl;
-		it++;
-
-	}
-	cout<< "\n\n";
-	str_list.erase( str_list.end(), ++str_list.begin() );
-	it = str_list.begin();
-	for( int i = 0; i<10; ++i){
-		cout<<*it<<endl;
-		it++;
-	}
-	**/
 	lm::LorenzMachine lorenz_machine;
 	lm::WheelSystem wheels;
 	lm::ITA2Converter converter;
 	lm::ITA2Converter::ITA2Message mess;
-	string m(" 999mai\ncki999 syn kierownika");
+	string m("01234567890123456789");
 	std::transform( m.begin(), m.end(), m.begin(), ::toupper);
 	converter.encode( m, mess );
-	/**MyClass my_class(1);
-	mtl::List<MyClass> int_list;
-	int_list.push_back( my_class );
-	my_class.value_= 10;
-	int_list.push_front( my_class );
-	my_class.value_= 5;
-	int_list.push_back( my_class );
-	cout<< int_list.front()<< std::endl << int_list.back() <<std::endl;
-	cout<<" Size: "<< int_list.size() << std::endl;
-	**/
-
+	converter.decode( mess, m);
+	string co, ci;
+	lm::WheelSystem::WheelsPositionCode code = {'a', 'a','c','g','e','f','g','a','a','a','a','a'};
+	lorenz_machine.init_position( code );
+	lorenz_machine.encipher( m, co );
+	//cout<<m<<" ZAKODOWANA "<<co<<endl;
+	lorenz_machine.init_position( code );
+	lorenz_machine.decipher( co, ci );
+	//cout<<co<<" ODKODOWANA "<<ci<<endl;
 	return 0;
 }

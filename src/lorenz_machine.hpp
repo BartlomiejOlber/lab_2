@@ -10,18 +10,22 @@
 
 #include <string>
 #include "wheel_system.hpp"
+#include "ita2_converter.hpp"
 
 namespace lm{
 
 class LorenzMachine{
 
 private:
-
-	WheelSystem wheel_system;
+	WheelSystem wheel_system_;
+	ITA2Converter ita2_converter_;
 
 public:
-	void encipher( const std::string& plaintext, std::string& ciphertext  );
+	void encipher( const std::string& plaintext, std::string& ciphertext );
 	void decipher( const std::string& ciphertext, std::string& plaintext );
+	void init_position( const WheelSystem::WheelsPositionCode& start_code ){
+		wheel_system_.set_wheels_position( start_code ); }
+
 };
 
 }//end namespace

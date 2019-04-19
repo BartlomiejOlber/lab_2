@@ -42,6 +42,10 @@ void ITA2Converter::init_maps()
 	character = '\n';
 	digits.insert( std::pair<char, std::bitset<5> >( character , tmp_bitset ));
 	letters.insert( std::pair<char, std::bitset<5> >( character , tmp_bitset ));
+	std::bitset<5> tmp_bitset_("00100");
+	character = ' ';
+	digits.insert( std::pair<char, std::bitset<5> >( character , tmp_bitset_ ));
+	letters.insert( std::pair<char, std::bitset<5> >( character , tmp_bitset_ ));
 	ifs.close();
 }
 
@@ -72,16 +76,34 @@ void ITA2Converter::encode( const std::string& plaintext, ITA2Message& codetext 
 			}
 		}
 	}
-	std::cout<< plaintext<<std::endl;
+	/**std::cout<< plaintext<<std::endl;
 	for( auto it = codetext.begin(); it!=codetext.end(); ++it ){
 		std::cout<< it->to_string()<< " ";
-	}
+	}**/
 
 }
 
 void ITA2Converter::decode( const ITA2Message& codetext, std::string& plaintext )
 {
-
+	bool letters_ctrl = true;
+	ITA2Map::iterator it_map;
+	for( auto it = codetext.begin(); it!=codetext.end(); ++it ){
+		if( *it == std::bitset<5>("11011") )
+			letters_ctrl = !letters_ctrl;
+		if( letters_ctrl ){
+			for( it_map = letters.begin(); it_map!= letters.end(); ++it_map){
+				if( *it == it_map->second ){
+					plaintext += it_map->first;
+				}
+			}
+		}else{
+			for( it_map = digits.begin(); it_map!= digits.end(); ++it_map){
+				if( *it == it_map->second ){
+					plaintext += it_map->first;
+				}
+			}
+		}
+	}
 }
 
 }//end namespace

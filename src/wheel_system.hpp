@@ -9,6 +9,7 @@
 #define WHEEL_SYSTEM_HPP_
 
 #include <array>
+#include <bitset>
 #include "circular_list.hpp"
 #include <map>
 
@@ -19,6 +20,8 @@ class WheelSystem {
 public:
 	typedef std::array<int,12> WheelsPosition;
 	typedef std::array<char,12> WheelsPositionCode;
+	typedef mtl::CircularList<char> Wheel;
+	typedef std::array<WheelSystem::Wheel::iterator,12> CurrentSettings;
 
 	class PositionTable {
 	private:
@@ -30,22 +33,22 @@ public:
 	};
 
 private:
-	static mtl::CircularList<char> psi_1;
-	static mtl::CircularList<char> psi_2;
-	static mtl::CircularList<char> psi_3;
-	static mtl::CircularList<char> psi_4;
-	static mtl::CircularList<char> psi_5;
-	static mtl::CircularList<char> mu_37;
-	static mtl::CircularList<char> mu_61;
-	static mtl::CircularList<char> chi_1;
-	static mtl::CircularList<char> chi_2;
-	static mtl::CircularList<char> chi_3;
-	static mtl::CircularList<char> chi_4;
-	static mtl::CircularList<char> chi_5;
+	static Wheel psi_1;
+	static Wheel psi_2;
+	static Wheel psi_3;
+	static Wheel psi_4;
+	static Wheel psi_5;
+	static Wheel mu_37;
+	static Wheel mu_61;
+	static Wheel chi_1;
+	static Wheel chi_2;
+	static Wheel chi_3;
+	static Wheel chi_4;
+	static Wheel chi_5;
 	static bool is_init;
 	static void init_wheels();
 	static PositionTable position_table;
-
+	CurrentSettings current_position_;
 
 public:
 	WheelSystem();
@@ -53,11 +56,11 @@ public:
 	{
 		position_table.get_wheels_position_( start_code, wheels_position );
 	}
-
+	void set_wheels_position( const WheelsPositionCode& start_code );
+	void generate_key( std::bitset<5>& key );
+	void rotate();
 };
 
 }//end namespace
-
-
 
 #endif /* WHEEL_SYSTEM_HPP_ */
