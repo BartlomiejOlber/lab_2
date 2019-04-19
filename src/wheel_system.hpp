@@ -22,11 +22,11 @@ public:
 
 	class PositionTable {
 	private:
-		std::map<char, WheelsPosition > reading_table;
+		std::map<char, WheelsPosition > position_table_;
 
 	public:
-		void get_wheels_position(  const WheelsPositionCode& start_code, WheelsPosition& wheels_position );
 		void load();
+		void get_wheels_position_(  const WheelsPositionCode& start_code, WheelsPosition& wheels_position );
 	};
 
 private:
@@ -49,6 +49,10 @@ private:
 
 public:
 	WheelSystem();
+	void get_wheels_position(  const WheelsPositionCode& start_code, WheelsPosition& wheels_position )
+	{
+		position_table.get_wheels_position_( start_code, wheels_position );
+	}
 
 };
 

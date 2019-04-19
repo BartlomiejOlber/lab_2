@@ -11,6 +11,7 @@
 #include<list>
 
 #include "lorenz_machine.hpp"
+#include "ita2_converter.hpp"
 #include "circular_list.hpp"
 using namespace std;
 
@@ -50,6 +51,7 @@ int main() {
 
 	lm::LorenzMachine lorenz_machine;
 	lm::WheelSystem wheels;
+	lm::ITA2Converter converter;
 
 	/**MyClass my_class(1);
 	mtl::List<MyClass> int_list;
