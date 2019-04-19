@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <string>
+#include <algorithm>
 #include<list>
 
 #include "lorenz_machine.hpp"
@@ -48,11 +49,13 @@ int main() {
 		it++;
 	}
 	**/
-
 	lm::LorenzMachine lorenz_machine;
 	lm::WheelSystem wheels;
 	lm::ITA2Converter converter;
-
+	lm::ITA2Converter::ITA2Message mess;
+	string m(" 999mai\ncki999 syn kierownika");
+	std::transform( m.begin(), m.end(), m.begin(), ::toupper);
+	converter.encode( m, mess );
 	/**MyClass my_class(1);
 	mtl::List<MyClass> int_list;
 	int_list.push_back( my_class );
