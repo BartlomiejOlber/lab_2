@@ -32,17 +32,17 @@ int main() {
 	lm::WheelSystem wheels;
 	lm::ITA2Converter converter;
 	lm::ITA2Converter::ITA2Message mess;
-	string m("01234567890123456789");
+	string m("liverpoolfc");
 	std::transform( m.begin(), m.end(), m.begin(), ::toupper);
-	converter.encode( m, mess );
-	converter.decode( mess, m);
+	//converter.encode( m, mess );
+	//converter.decode( mess, m);
 	string co, ci;
 	lm::WheelSystem::WheelsPositionCode code = {'a', 'a','c','g','e','f','g','a','a','a','a','a'};
 	lorenz_machine.init_position( code );
 	lorenz_machine.encipher( m, co );
-	//cout<<m<<" ZAKODOWANA "<<co<<endl;
+	cout<<m<<" ZAKODOWANA "<<co<<endl;
 	lorenz_machine.init_position( code );
 	lorenz_machine.decipher( co, ci );
-	//cout<<co<<" ODKODOWANA "<<ci<<endl;
+	cout<<co<<" ODKODOWANA "<<ci<<endl;
 	return 0;
 }

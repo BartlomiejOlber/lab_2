@@ -21,7 +21,6 @@ public:
 	typedef std::array<int,12> WheelsPosition;
 	typedef std::array<char,12> WheelsPositionCode;
 	typedef mtl::CircularList<char> Wheel;
-	typedef std::array<WheelSystem::Wheel::iterator,12> CurrentSettings;
 
 	class PositionTable {
 	private:
@@ -33,22 +32,32 @@ public:
 	};
 
 private:
-	static Wheel psi_1;
-	static Wheel psi_2;
-	static Wheel psi_3;
-	static Wheel psi_4;
-	static Wheel psi_5;
-	static Wheel mu_37;
-	static Wheel mu_61;
-	static Wheel chi_1;
-	static Wheel chi_2;
-	static Wheel chi_3;
-	static Wheel chi_4;
-	static Wheel chi_5;
-	static bool is_init;
-	static void init_wheels();
+	Wheel psi_1;
+	Wheel::iterator psi_1_iterator;
+	Wheel psi_2;
+	Wheel::iterator psi_2_iterator;
+	Wheel psi_3;
+	Wheel::iterator psi_3_iterator;
+	Wheel psi_4;
+	Wheel::iterator psi_4_iterator;
+	Wheel psi_5;
+	Wheel::iterator psi_5_iterator;
+	Wheel mu_37;
+	Wheel::iterator mu_37_iterator;
+	Wheel mu_61;
+	Wheel::iterator mu_61_iterator;
+	Wheel chi_1;
+	Wheel::iterator chi_1_iterator;
+	Wheel chi_2;
+	Wheel::iterator chi_2_iterator;
+	Wheel chi_3;
+	Wheel::iterator chi_3_iterator;
+	Wheel chi_4;
+	Wheel::iterator chi_4_iterator;
+	Wheel chi_5;
+	Wheel::iterator chi_5_iterator;
+	void init_wheels();
 	static PositionTable position_table;
-	CurrentSettings current_position_;
 
 public:
 	WheelSystem();

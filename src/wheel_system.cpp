@@ -12,72 +12,57 @@
 
 namespace lm {
 
-bool WheelSystem::is_init = false;
 WheelSystem::PositionTable WheelSystem::position_table;
-mtl::CircularList<char> WheelSystem::psi_1;
-mtl::CircularList<char> WheelSystem::psi_2;
-mtl::CircularList<char> WheelSystem::psi_3;
-mtl::CircularList<char> WheelSystem::psi_4;
-mtl::CircularList<char> WheelSystem::psi_5;
-mtl::CircularList<char> WheelSystem::mu_37;
-mtl::CircularList<char> WheelSystem::mu_61;
-mtl::CircularList<char> WheelSystem::chi_1;
-mtl::CircularList<char> WheelSystem::chi_2;
-mtl::CircularList<char> WheelSystem::chi_3;
-mtl::CircularList<char> WheelSystem::chi_4;
-mtl::CircularList<char> WheelSystem::chi_5;
 
 WheelSystem::WheelSystem()
 {
-	if( !WheelSystem::is_init ){
-		WheelSystem::init_wheels();
-		WheelSystem::position_table.load();
-		WheelSystem::is_init = true;
-	}
+	WheelSystem::init_wheels();
+	WheelSystem::position_table.load();
 }
 
 void WheelSystem::init_wheels()
 {
+
 	std::ifstream ifs;
 	ifs.open( "../data/wheels.txt", std::ifstream::in);
 	std::string line;
 	std::string::iterator it;
 	std::getline( ifs, line );
 	for ( it=line.begin(); it!=line.end(); ++it )
-	    psi_1.push_back( *it );
+	    psi_1.push_back(  (*it - '0') );
 	std::getline( ifs, line );
 	for ( it=line.begin(); it!=line.end(); ++it )
-		psi_2.push_back( *it );
+		psi_2.push_back( (*it - '0') );
 	std::getline( ifs, line );
 	for ( it=line.begin(); it!=line.end(); ++it )
-		psi_3.push_back( *it );
+		psi_3.push_back( (*it - '0') );
 	std::getline( ifs, line );
 	for ( it=line.begin(); it!=line.end(); ++it )
-		psi_4.push_back( *it );
+		psi_4.push_back( (*it - '0') );
 	std::getline( ifs, line );
 	for ( it=line.begin(); it!=line.end(); ++it )
-		psi_5.push_back( *it );
+		psi_5.push_back( (*it - '0') );
 	std::getline( ifs, line );
 	for ( it=line.begin(); it!=line.end(); ++it )
-		mu_37.push_back( *it );
+		mu_37.push_back( (*it - '0') );
 	std::getline( ifs, line );
 	for ( it=line.begin(); it!=line.end(); ++it )
-		mu_61.push_back( *it );
+		mu_61.push_back( (*it - '0') );
 	std::getline( ifs, line );
 	for ( it=line.begin(); it!=line.end(); ++it )
-		chi_1.push_back( *it );
+		chi_1.push_back( (*it - '0') );
 	std::getline( ifs, line );
 	for ( it=line.begin(); it!=line.end(); ++it )
-		chi_2.push_back( *it );
+		chi_2.push_back( (*it - '0') );
 	std::getline( ifs, line );
 	for ( it=line.begin(); it!=line.end(); ++it )
-		chi_3.push_back( *it );
+		chi_3.push_back( (*it - '0') );
 	std::getline( ifs, line );
 	for ( it=line.begin(); it!=line.end(); ++it )
-		chi_4.push_back( *it );
+		chi_4.push_back( (*it - '0') );
 	std::getline( ifs, line );
 	for ( it=line.begin(); it!=line.end(); ++it )
-		chi_5.push_back( *it );
+		chi_5.push_back( (*it - '0') );
 	ifs.close();
 }
 
@@ -123,62 +108,68 @@ void WheelSystem::set_wheels_position( const WheelsPositionCode& start_code )
 	WheelsPosition wheels_position;
 	get_wheels_position( start_code, wheels_position );
 	Wheel::iterator it = psi_1.position( wheels_position[0] );
-	current_position_[0] = it;
+	psi_1_iterator = it;
 	it = psi_2.position( wheels_position[1] );
-	current_position_[1] = it;
+	psi_2_iterator = it;
 	it = psi_3.position( wheels_position[2] );
-	current_position_[2] = it;
+	psi_3_iterator = it;
 	it = psi_4.position( wheels_position[3] );
-	current_position_[3] = it;
+	psi_4_iterator = it;
 	it = psi_5.position( wheels_position[4] );
-	current_position_[4] = it;
+	psi_5_iterator = it;
 	it = mu_37.position( wheels_position[5] );
-	current_position_[5] = it;
+	mu_37_iterator = it;
 	it = mu_61.position( wheels_position[6] );
-	current_position_[6] = it;
+	mu_61_iterator = it;
 	it = chi_1.position( wheels_position[7] );
-	current_position_[7] = it;
+	chi_1_iterator = it;
 	it = chi_2.position( wheels_position[8] );
-	current_position_[8] = it;
+	chi_2_iterator = it;
 	it = chi_3.position( wheels_position[9] );
-	current_position_[9] = it;
+	chi_3_iterator = it;
 	it = chi_4.position( wheels_position[10] );
-	current_position_[10] = it;
+	chi_4_iterator = it;
 	it = chi_5.position( wheels_position[11] );
-	current_position_[11] = it;
-	auto iter = psi_3.begin();
-	for( int i = 0; i<43;i++){
-
-		std::cout<< " "<<*iter;
-		++iter;
-			//	std::cout<<*(current_position_[i]);
-		}
+	chi_5_iterator = it;
 }
 
 void WheelSystem::generate_key( std::bitset<5>& key )
 {
 	std::bitset<5> chi_key, psi_key;
-	for( int i = 0; i<5; ++i ){
-		if( *(current_position_[i+7]) == '1')
-			chi_key[i] = 1;
-		if( *(current_position_[i]) == '1')
-			psi_key[i] = 1;
-	}
+	chi_key[0] = *(chi_1_iterator);
+	chi_key[1] = *(chi_2_iterator);
+	chi_key[2] = *(chi_3_iterator);
+	chi_key[3] = *(chi_4_iterator);
+	chi_key[4] = *(chi_5_iterator);
+	psi_key[0] = *(psi_1_iterator);
+	psi_key[1] = *(psi_2_iterator);
+	psi_key[2] = *(psi_3_iterator);
+	psi_key[3] = *(psi_4_iterator);
+	psi_key[4] = *(psi_5_iterator);
 	key = (chi_key ^ psi_key);
 }
 
 void WheelSystem::rotate()
 {
-	for( int i = 6; i<12; ++i ){
-		++current_position_[i];
+	++chi_1_iterator;
+	++chi_2_iterator;
+	++chi_3_iterator;
+	++chi_4_iterator;
+	++chi_5_iterator;
+	++mu_61_iterator;
+	if(*mu_61_iterator)
+		++mu_37_iterator;
+	if(!(*mu_37_iterator)){
+		++psi_1_iterator;
+		++psi_2_iterator;
+		++psi_3_iterator;
+		++psi_4_iterator;
+		++psi_5_iterator;
 	}
-	if( *(current_position_[6]) )
-		++current_position_[5];
-	if( *(current_position_[5]) ){
-		for( int i = 0; i<5; ++i ){
-			++current_position_[i];
-		}
-	}
+	std::cout<< "\n iterators:  "<<(int)*(chi_1_iterator)<<" "<<(int)*(chi_2_iterator)<<" "<<(int)*(chi_3_iterator)<<" "
+			<<(int)*(chi_4_iterator)<<" "<<(int)*(chi_5_iterator)<<" "<<(int)*(mu_61_iterator)<<" "
+			<<(int)*(mu_37_iterator)<<" "<<(int)*(psi_1_iterator)<<" "<<(int)*(psi_2_iterator)<<" "
+			<<(int)*(psi_3_iterator)<<" "<<(int)*(psi_4_iterator)<<" "<<(int)*(psi_5_iterator)<<" ";
 }
 
 }//end namespace
