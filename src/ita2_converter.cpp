@@ -24,7 +24,7 @@ ITA2Converter::ITA2Converter()
 void ITA2Converter::init_maps()
 {
 	std::ifstream ifs;
-	ifs.open( "../data/digits.txt", std::ifstream::in);
+	ifs.open( "../data/baudot_code.txt", std::ifstream::in);
 	std::string line, tmp_str;
 	char character;
 	while (std::getline( ifs, line )){
@@ -68,11 +68,6 @@ void ITA2Converter::encode( const std::string& plaintext, ITA2Message& codetext 
 			}
 		}
 	}
-	/**std::cout<< plaintext<<std::endl;
-	for( auto it = codetext.begin(); it!=codetext.end(); ++it ){
-		std::cout<< it->to_string()<< " ";
-	}**/
-
 }
 
 void ITA2Converter::decode( const ITA2Message& codetext, std::string& plaintext )

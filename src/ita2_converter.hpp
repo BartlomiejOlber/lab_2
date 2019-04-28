@@ -29,7 +29,6 @@ public:
 	ITA2Converter();
 	void encode( const std::string& plaintext, ITA2Message& codetext  );
 	void decode( const ITA2Message& codetext, std::string& plaintext );
-
 };
 
 }//end namespace
