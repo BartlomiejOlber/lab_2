@@ -32,20 +32,12 @@ void ITA2Converter::init_maps()
 		std::getline(iss, tmp_str, ' ');
 		std::bitset<5> tmp_bitset(tmp_str);
 		std::getline(iss, tmp_str, ' ');
-		character = tmp_str[0];
+		character = std::stoi( tmp_str );
 		letters.insert( std::pair<char, std::bitset<5> > ( character , tmp_bitset ));
 		std::getline(iss, tmp_str, ' ');
-		character = tmp_str[0];
+		character = std::stoi( tmp_str );
 		digits.insert( std::pair<char, std::bitset<5> >( character , tmp_bitset ));
 	}
-	std::bitset<5> tmp_bitset("01000");
-	character = '\n';
-	digits.insert( std::pair<char, std::bitset<5> >( character , tmp_bitset ));
-	letters.insert( std::pair<char, std::bitset<5> >( character , tmp_bitset ));
-	std::bitset<5> tmp_bitset_("00100");
-	character = ' ';
-	digits.insert( std::pair<char, std::bitset<5> >( character , tmp_bitset_ ));
-	letters.insert( std::pair<char, std::bitset<5> >( character , tmp_bitset_ ));
 	ifs.close();
 }
 
@@ -88,8 +80,10 @@ void ITA2Converter::decode( const ITA2Message& codetext, std::string& plaintext 
 	bool letters_ctrl = true;
 	ITA2Map::iterator it_map;
 	for( auto it = codetext.begin(); it!=codetext.end(); ++it ){
-		if( *it == std::bitset<5>("11011") )
+		if( *it == std::bitset<5>("11011") ){
 			letters_ctrl = !letters_ctrl;
+			continue;
+		}
 		if( letters_ctrl ){
 			for( it_map = letters.begin(); it_map!= letters.end(); ++it_map){
 				if( *it == it_map->second ){

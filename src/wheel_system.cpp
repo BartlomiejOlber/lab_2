@@ -166,10 +166,11 @@ void WheelSystem::rotate()
 		++psi_4_iterator;
 		++psi_5_iterator;
 	}
-	std::cout<< "\n iterators:  "<<(int)*(chi_1_iterator)<<" "<<(int)*(chi_2_iterator)<<" "<<(int)*(chi_3_iterator)<<" "
+	/**std::cout<< "\n iterators:  "<<(int)*(chi_1_iterator)<<" "<<(int)*(chi_2_iterator)<<" "<<(int)*(chi_3_iterator)<<" "
 			<<(int)*(chi_4_iterator)<<" "<<(int)*(chi_5_iterator)<<" "<<(int)*(mu_61_iterator)<<" "
 			<<(int)*(mu_37_iterator)<<" "<<(int)*(psi_1_iterator)<<" "<<(int)*(psi_2_iterator)<<" "
 			<<(int)*(psi_3_iterator)<<" "<<(int)*(psi_4_iterator)<<" "<<(int)*(psi_5_iterator)<<" ";
+			**/
 }
 
 }//end namespace
