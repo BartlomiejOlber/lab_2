@@ -20,6 +20,7 @@ void UserInterface::loop()
 	int choice = 0;
 		do{
 			std::system( "clear" );
+			print_options();
 			choice = get_number();
 			switch(choice)
 			{
@@ -51,31 +52,35 @@ void UserInterface::load_message( const std::string& file_name, std::string& mes
 
 void UserInterface::save_message( const std::string& message )
 {
-	remove( "output.txt" );
-	std::ofstream outfile ("output.txt");
-	outfile << message;
-	outfile.close();
+	std::ofstream ofs;
+	ofs.open( "../data/output.txt" , std::ofstream::out | std::ofstream::trunc);
+	ofs << message;
+	ofs.close();
 }
 
 void UserInterface::get_position_code( lm::WheelSystem::WheelsPositionCode& code )
 {
 	std::string str;
-	std::cin >> str;
-	for( int i = 0; i<12; ++i )
+	std::cout<<"\n Enter machine's starting configuration (12 letters)\n";
+	std::getline(std::cin, str);
+	std::transform( str.begin(), str.end(), str.begin(), ::tolower);
+	for( unsigned int i = 0; i<str.size() && i<12; ++i )
 		code[i] = str[i];
 }
 
 std::string UserInterface::get_file_name()
 {
 	std::string str;
-	std::cin >> str;
+	std::cout<<"\n Enter the file's name e.g. message.txt\n";
+	std::getline(std::cin, str);
 	return str;
 }
 
 void UserInterface::get_message( std::string& message )
 {
 	char delim = 27;
-	std::getline(std::cin, message, delim);
+	std::cout<<"\n Type your message then press [esc] and enter to commit\n";
+	std::getline(std::cin, message,delim);
 }
 
 int UserInterface::get_number()
@@ -88,16 +93,37 @@ int UserInterface::get_number()
 		std::cin.ignore(256,'\n');
 		std::cin >> input;
 	}
+	std::cin.ignore();
 	return input;
 }
 
 void UserInterface::print_message( const std::string& message )
 {
+	std::cout<<"\n Your en/decrypted message :\n\t";
 	std::cout<<message;
+	std::cout<< " \n\n [1]. Back"<<std::endl;
+	std::cout<< "\n Selection: ";
+	int choice = 0;
+	while (choice!=1)
+	{
+		choice = get_number();
+	}
+}
+
+void UserInterface::print_options()
+{
+	std::cout<< "\n\n\t*Available options:*\n\n" << std::endl;
+	std::cout<< "[1]. Encipher file message" << std::endl;
+	std::cout<< "[2]. Decipher file message"<< std::endl;
+	std::cout<< "[3]. Encipher keyboard message"<<std::endl;
+	std::cout<< "[4]. Decipher keyboard message"<<std::endl;
+	std::cout<< "[5]. Exit"<<std::endl;
+	std::cout<< "\n Selection: ";
 }
 
 void UserInterface::encipher_file( lm::LorenzMachine& lorenz_machine )
 {
+	std::system( "clear" );
 	std::string file_name, input_message, output_message;
 	lm::WheelSystem::WheelsPositionCode position_code = {'a', 'a','a','a','a','a','a','a','a','a','a','a'};
 	file_name = get_file_name();
@@ -111,6 +137,7 @@ void UserInterface::encipher_file( lm::LorenzMachine& lorenz_machine )
 
 void UserInterface::decipher_file( lm::LorenzMachine& lorenz_machine )
 {
+	std::system( "clear" );
 	std::string file_name, input_message, output_message;
 	lm::WheelSystem::WheelsPositionCode position_code = {'a', 'a','a','a','a','a','a','a','a','a','a','a'};
 	file_name = get_file_name();
@@ -124,7 +151,8 @@ void UserInterface::decipher_file( lm::LorenzMachine& lorenz_machine )
 
 void UserInterface::encipher_keyboard( lm::LorenzMachine& lorenz_machine )
 {
-	std::string file_name, input_message, output_message;
+	std::system( "clear" );
+	std::string input_message, output_message;
 	lm::WheelSystem::WheelsPositionCode position_code = {'a', 'a','a','a','a','a','a','a','a','a','a','a'};
 	get_position_code( position_code );
 	lorenz_machine.init_position( position_code );
@@ -136,7 +164,8 @@ void UserInterface::encipher_keyboard( lm::LorenzMachine& lorenz_machine )
 
 void UserInterface::decipher_keyboard( lm::LorenzMachine& lorenz_machine )
 {
-	std::string file_name, input_message, output_message;
+	std::system( "clear" );
+	std::string input_message, output_message;
 	lm::WheelSystem::WheelsPositionCode position_code = {'a', 'a','a','a','a','a','a','a','a','a','a','a'};
 	get_position_code( position_code );
 	lorenz_machine.init_position( position_code );

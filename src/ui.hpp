@@ -24,6 +24,7 @@ public:
 	void get_message( std::string& message );
 	int get_number();
 	void print_message( const std::string& message );
+	void print_options();
 	void encipher_file( lm::LorenzMachine& lorenz_machine );
 	void decipher_file( lm::LorenzMachine& lorenz_machine );
 	void encipher_keyboard( lm::LorenzMachine& lorenz_machine );
