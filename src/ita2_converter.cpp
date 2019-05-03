@@ -14,6 +14,9 @@ namespace lm {
 
 ITA2Converter::ITA2Map ITA2Converter::digits;
 ITA2Converter::ITA2Map ITA2Converter::letters;
+const ITA2Converter::ITA2letter SHIFT_LETTERS("11011");
+const ITA2Converter::ITA2letter UNKNOWN_SIGN("00000");
+const ITA2Converter::ITA2letter SHIFT_DIGITS("11111");
 
 ITA2Converter::ITA2Converter()
 {
@@ -33,10 +36,10 @@ void ITA2Converter::init_maps()
 		std::bitset<5> tmp_bitset(tmp_str);
 		std::getline(iss, tmp_str, ' ');
 		character = std::stoi( tmp_str );
-		letters.insert( std::pair<char, std::bitset<5> > ( character , tmp_bitset ));
+		letters.insert( ITA2Pair( character , tmp_bitset ));
 		std::getline(iss, tmp_str, ' ');
 		character = std::stoi( tmp_str );
-		digits.insert( std::pair<char, std::bitset<5> >( character , tmp_bitset ));
+		digits.insert( ITA2Pair( character , tmp_bitset ));
 	}
 	ifs.close();
 }
@@ -51,20 +54,28 @@ void ITA2Converter::encode( const std::string& plaintext, ITA2Message& codetext 
 			if ( it != letters.end() ){
 				codetext.push_back( it->second );
 			}else{
-				letters_ctrl = false;
-				codetext.push_back( std::bitset<5>("11011"));
 				it = digits.find( *it_str );
-				codetext.push_back( it->second );
+				if( it != digits.end() ){
+					letters_ctrl = false;
+					codetext.push_back( SHIFT_DIGITS );
+					codetext.push_back( it->second );
+				}else{
+					codetext.push_back( UNKNOWN_SIGN );
+				}
 			}
 		}else{
 			it = digits.find( *it_str );
 			if ( it != digits.end() ){
 				codetext.push_back( it->second );
 			}else{
-				letters_ctrl = true;
-				codetext.push_back( std::bitset<5>("11011"));
 				it = letters.find( *it_str );
-				codetext.push_back( it->second );
+				if( it != letters.end() ){
+					letters_ctrl = true;
+					codetext.push_back( SHIFT_LETTERS );
+					codetext.push_back( it->second );
+				}else{
+					codetext.push_back( UNKNOWN_SIGN );
+				}
 			}
 		}
 	}
@@ -75,8 +86,14 @@ void ITA2Converter::decode( const ITA2Message& codetext, std::string& plaintext 
 	bool letters_ctrl = true;
 	ITA2Map::iterator it_map;
 	for( auto it = codetext.begin(); it!=codetext.end(); ++it ){
-		if( *it == std::bitset<5>("11011") ){
-			letters_ctrl = !letters_ctrl;
+		if( *it == SHIFT_LETTERS ){
+			letters_ctrl = true;
+			//plaintext += shift_letters_char;
+			continue;
+		}
+		if( *it == SHIFT_DIGITS ){
+			letters_ctrl = false;
+			//plaintext += shift_digits_char;
 			continue;
 		}
 		if( letters_ctrl ){

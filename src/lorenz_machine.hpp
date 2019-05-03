@@ -25,6 +25,10 @@ public:
 	void decipher( const std::string& ciphertext, std::string& plaintext );
 	void init_position( const WheelSystem::WheelsPositionCode& start_code ){
 		wheel_system_.set_wheels_position( start_code ); }
+
+private:
+	void xor_message( ITA2Converter::ITA2Message& codemessage );
+
 };
 
 }//end namespace

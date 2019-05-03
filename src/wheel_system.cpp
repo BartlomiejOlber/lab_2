@@ -22,48 +22,37 @@ WheelSystem::WheelSystem()
 
 void WheelSystem::init_wheels()
 {
-
 	std::ifstream ifs;
 	ifs.open( "../data/wheels.txt", std::ifstream::in);
+	init_wheel( ifs, psi_1 );
+	init_wheel( ifs, psi_2 );
+	init_wheel( ifs, psi_3 );
+	init_wheel( ifs, psi_4 );
+	init_wheel( ifs, psi_5 );
+	init_wheel( ifs, mu_37 );
+	init_wheel( ifs, mu_61 );
+	init_wheel( ifs, chi_1 );
+	init_wheel( ifs, chi_2 );
+	init_wheel( ifs, chi_3 );
+	init_wheel( ifs, chi_4 );
+	init_wheel( ifs, chi_5 );
+	ifs.close();
+}
+
+void WheelSystem::init_wheel( std::ifstream& ifs, Wheel& wheel )
+{
 	std::string line;
 	std::string::iterator it;
 	std::getline( ifs, line );
 	for ( it=line.begin(); it!=line.end(); ++it )
-	    psi_1.push_back(  (*it - '0') );
-	std::getline( ifs, line );
-	for ( it=line.begin(); it!=line.end(); ++it )
-		psi_2.push_back( (*it - '0') );
-	std::getline( ifs, line );
-	for ( it=line.begin(); it!=line.end(); ++it )
-		psi_3.push_back( (*it - '0') );
-	std::getline( ifs, line );
-	for ( it=line.begin(); it!=line.end(); ++it )
-		psi_4.push_back( (*it - '0') );
-	std::getline( ifs, line );
-	for ( it=line.begin(); it!=line.end(); ++it )
-		psi_5.push_back( (*it - '0') );
-	std::getline( ifs, line );
-	for ( it=line.begin(); it!=line.end(); ++it )
-		mu_37.push_back( (*it - '0') );
-	std::getline( ifs, line );
-	for ( it=line.begin(); it!=line.end(); ++it )
-		mu_61.push_back( (*it - '0') );
-	std::getline( ifs, line );
-	for ( it=line.begin(); it!=line.end(); ++it )
-		chi_1.push_back( (*it - '0') );
-	std::getline( ifs, line );
-	for ( it=line.begin(); it!=line.end(); ++it )
-		chi_2.push_back( (*it - '0') );
-	std::getline( ifs, line );
-	for ( it=line.begin(); it!=line.end(); ++it )
-		chi_3.push_back( (*it - '0') );
-	std::getline( ifs, line );
-	for ( it=line.begin(); it!=line.end(); ++it )
-		chi_4.push_back( (*it - '0') );
-	std::getline( ifs, line );
-	for ( it=line.begin(); it!=line.end(); ++it )
-		chi_5.push_back( (*it - '0') );
-	ifs.close();
+	    wheel.push_back( (*it - '0') );
+}
+
+void WheelSystem::init_position_code( WheelsPositionCode& position_code )
+{
+	for( int i = 0; i<WHEELS_NUMBER; ++i ){
+		position_code[i] = 'a';
+	}
 }
 
 void WheelSystem::PositionTable::load()
@@ -87,7 +76,7 @@ void WheelSystem::PositionTable::load()
 	ifs.close();
 }
 
-void WheelSystem::PositionTable::get_wheels_position_(  const WheelsPositionCode& start_code, WheelsPosition& wheels_position )
+void WheelSystem::PositionTable::init_wheels_position( const WheelsPositionCode& start_code, WheelsPosition& wheels_position )
 {
 	int i = 0;
 	for ( auto it = start_code.begin(); it != start_code.end(); ++it, ++i){
@@ -125,9 +114,9 @@ void WheelSystem::set_wheels_position( const WheelsPositionCode& start_code )
 	chi_5_iterator = it;
 }
 
-void WheelSystem::generate_key( std::bitset<5>& key )
+void WheelSystem::generate_key( Key& key )
 {
-	std::bitset<5> chi_key, psi_key;
+	Key chi_key, psi_key;
 	chi_key[0] = *(chi_1_iterator);
 	chi_key[1] = *(chi_2_iterator);
 	chi_key[2] = *(chi_3_iterator);

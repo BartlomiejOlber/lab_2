@@ -10,16 +10,18 @@
 
 #include <array>
 #include <bitset>
-#include "circular_list.hpp"
 #include <map>
+#include "circular_list.hpp"
 
 namespace lm {
 
 class WheelSystem {
+	static const int WHEELS_NUMBER = 12;
 
 public:
-	typedef std::array<int,12> WheelsPosition;
-	typedef std::array<char,12> WheelsPositionCode;
+	typedef std::bitset<5> Key;
+	typedef std::array<int,WHEELS_NUMBER> WheelsPosition;
+	typedef std::array<char,WHEELS_NUMBER> WheelsPositionCode;
 	typedef mtl::CircularList<char> Wheel;
 
 	class PositionTable {
@@ -28,7 +30,7 @@ public:
 
 	public:
 		void load();
-		void get_wheels_position_(  const WheelsPositionCode& start_code, WheelsPosition& wheels_position );
+		void init_wheels_position( const WheelsPositionCode& start_code, WheelsPosition& wheels_position );
 	};
 
 private:
@@ -57,17 +59,19 @@ private:
 	Wheel chi_5;
 	Wheel::iterator chi_5_iterator;
 	void init_wheels();
+	void init_wheel( std::ifstream& ifs, Wheel& wheel );
 	static PositionTable position_table;
 
 public:
 	WheelSystem();
-	void get_wheels_position(  const WheelsPositionCode& start_code, WheelsPosition& wheels_position )
+	void get_wheels_position( const WheelsPositionCode& start_code, WheelsPosition& wheels_position )
 	{
-		position_table.get_wheels_position_( start_code, wheels_position );
+		position_table.init_wheels_position( start_code, wheels_position );
 	}
 	void set_wheels_position( const WheelsPositionCode& start_code );
-	void generate_key( std::bitset<5>& key );
+	void generate_key( Key& key );
 	void rotate();
+	static void init_position_code( WheelsPositionCode& position_code );
 };
 
 }//end namespace

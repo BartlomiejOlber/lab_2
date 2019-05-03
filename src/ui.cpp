@@ -18,26 +18,26 @@ void UserInterface::loop()
 {
 	lm::LorenzMachine lorenz_machine;
 	int choice = 0;
-		do{
-			std::system( "clear" );
-			print_options();
-			choice = get_number();
-			switch(choice)
-			{
-				case 1:
-					encipher_file( lorenz_machine );
-					break;
-				case 2:
-					decipher_file( lorenz_machine );
-					break;
-				case 3:
-					encipher_keyboard( lorenz_machine );
-					break;
-				case 4:
-					decipher_keyboard( lorenz_machine );
-					break;
-			}
-		}while(choice != 5);
+	do{
+		std::system( "clear" );
+		print_options();
+		choice = get_choice();
+		switch(choice)
+		{
+			case 1:
+				encipher_file( lorenz_machine );
+				break;
+			case 2:
+				decipher_file( lorenz_machine );
+				break;
+			case 3:
+				encipher_keyboard( lorenz_machine );
+				break;
+			case 4:
+				decipher_keyboard( lorenz_machine );
+				break;
+		}
+	}while(choice != 5);
 }
 
 void UserInterface::load_message( const std::string& file_name, std::string& message)
@@ -68,12 +68,10 @@ void UserInterface::get_position_code( lm::WheelSystem::WheelsPositionCode& code
 		code[i] = str[i];
 }
 
-std::string UserInterface::get_file_name()
+void UserInterface::get_file_name( std::string& file_name )
 {
-	std::string str;
 	std::cout<<"\n Enter the file's name e.g. message.txt\n";
-	std::getline(std::cin, str);
-	return str;
+	std::getline(std::cin, file_name);
 }
 
 void UserInterface::get_message( std::string& message )
@@ -83,7 +81,7 @@ void UserInterface::get_message( std::string& message )
 	std::getline(std::cin, message,delim);
 }
 
-int UserInterface::get_number()
+int UserInterface::get_choice()
 {
 	int input;
 	std::cin >> input;
@@ -106,7 +104,7 @@ void UserInterface::print_message( const std::string& message )
 	int choice = 0;
 	while (choice!=1)
 	{
-		choice = get_number();
+		choice = get_choice();
 	}
 }
 
@@ -125,8 +123,9 @@ void UserInterface::encipher_file( lm::LorenzMachine& lorenz_machine )
 {
 	std::system( "clear" );
 	std::string file_name, input_message, output_message;
-	lm::WheelSystem::WheelsPositionCode position_code = {'a', 'a','a','a','a','a','a','a','a','a','a','a'};
-	file_name = get_file_name();
+	lm::WheelSystem::WheelsPositionCode position_code;
+	lm::WheelSystem::init_position_code( position_code );
+	get_file_name( file_name );
 	load_message( file_name, input_message );
 	std::transform( input_message.begin(), input_message.end(), input_message.begin(), ::toupper);
 	get_position_code( position_code );
@@ -139,8 +138,9 @@ void UserInterface::decipher_file( lm::LorenzMachine& lorenz_machine )
 {
 	std::system( "clear" );
 	std::string file_name, input_message, output_message;
-	lm::WheelSystem::WheelsPositionCode position_code = {'a', 'a','a','a','a','a','a','a','a','a','a','a'};
-	file_name = get_file_name();
+	lm::WheelSystem::WheelsPositionCode position_code;
+	lm::WheelSystem::init_position_code( position_code );
+	get_file_name( file_name );
 	load_message( file_name, input_message );
 	std::transform( input_message.begin(), input_message.end(), input_message.begin(), ::toupper);
 	get_position_code( position_code );
@@ -153,7 +153,8 @@ void UserInterface::encipher_keyboard( lm::LorenzMachine& lorenz_machine )
 {
 	std::system( "clear" );
 	std::string input_message, output_message;
-	lm::WheelSystem::WheelsPositionCode position_code = {'a', 'a','a','a','a','a','a','a','a','a','a','a'};
+	lm::WheelSystem::WheelsPositionCode position_code;
+	lm::WheelSystem::init_position_code( position_code );
 	get_position_code( position_code );
 	lorenz_machine.init_position( position_code );
 	get_message( input_message );
@@ -166,7 +167,8 @@ void UserInterface::decipher_keyboard( lm::LorenzMachine& lorenz_machine )
 {
 	std::system( "clear" );
 	std::string input_message, output_message;
-	lm::WheelSystem::WheelsPositionCode position_code = {'a', 'a','a','a','a','a','a','a','a','a','a','a'};
+	lm::WheelSystem::WheelsPositionCode position_code;
+	lm::WheelSystem::init_position_code( position_code );
 	get_position_code( position_code );
 	lorenz_machine.init_position( position_code );
 	get_message( input_message );

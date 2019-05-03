@@ -17,8 +17,10 @@ namespace lm {
 
 class ITA2Converter {
 public:
-	typedef std::map<char, std::bitset<5> > ITA2Map;
-	typedef std::vector<std::bitset<5> > ITA2Message;
+	typedef std::bitset<5> ITA2letter;
+	typedef std::map<char, ITA2letter > ITA2Map;
+	typedef std::pair<char, ITA2letter> ITA2Pair;
+	typedef std::vector<ITA2letter > ITA2Message;
 
 private:
 	static ITA2Map letters;

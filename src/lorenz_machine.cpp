@@ -13,12 +13,7 @@ void LorenzMachine::encipher( const std::string& plaintext, std::string& ciphert
 {
 	ITA2Converter::ITA2Message codemessage;
 	ita2_converter_.encode( plaintext, codemessage );
-	std::bitset<5> key;
-	for( auto i = codemessage.begin(); i != codemessage.end(); ++i){
-		wheel_system_.generate_key(key);
-		*i = (*i ^ key);
-		wheel_system_.rotate();
-	}
+	xor_message( codemessage );
 	ita2_converter_.decode( codemessage, ciphertext );
 }
 
@@ -26,13 +21,18 @@ void LorenzMachine::decipher( const std::string& ciphertext, std::string& plaint
 {
 	ITA2Converter::ITA2Message codemessage;
 	ita2_converter_.encode( ciphertext, codemessage );
-	std::bitset<5> key;
+	xor_message( codemessage );
+	ita2_converter_.decode( codemessage, plaintext );
+}
+
+void LorenzMachine::xor_message( ITA2Converter::ITA2Message& codemessage )
+{
+	ITA2Converter::ITA2letter key;
 	for( auto i = codemessage.begin(); i != codemessage.end(); ++i){
 		wheel_system_.generate_key(key);
 		*i = (*i ^ key);
 		wheel_system_.rotate();
 	}
-	ita2_converter_.decode( codemessage, plaintext );
 }
 
 }//end namespace
