@@ -43,7 +43,7 @@ public:
 			iterator() : node_(nullptr){};
 			explicit iterator( Node* node ) : node_(node){};
 			iterator( const iterator& right_iterator ) : node_( right_iterator.node_ ) {};
-			iterator& operator= ( const iterator& right_iterator ) { //todo: return const iterator
+			iterator& operator= ( const iterator& right_iterator ) {
 				node_ = right_iterator.node_;
 				return *this;
 			};

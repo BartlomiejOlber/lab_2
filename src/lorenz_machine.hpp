@@ -8,9 +8,8 @@
 #ifndef LORENZ_MACHINE_HPP_
 #define LORENZ_MACHINE_HPP_
 
-#include <string>
+#include "baudot_converter.hpp"
 #include "wheel_system.hpp"
-#include "ita2_converter.hpp"
 
 namespace lm{
 
@@ -18,7 +17,7 @@ class LorenzMachine{
 
 private:
 	WheelSystem wheel_system_;
-	ITA2Converter ita2_converter_;
+	BaudotConverter baudot_converter_;
 
 public:
 	void encipher( const std::string& plaintext, std::string& ciphertext );
@@ -27,8 +26,7 @@ public:
 		wheel_system_.set_wheels_position( start_code ); }
 
 private:
-	void xor_message( ITA2Converter::ITA2Message& codemessage );
-
+	void xor_message( BaudotConverter::BaudotMessage& codemessage );
 };
 
 }//end namespace

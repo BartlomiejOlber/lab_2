@@ -97,7 +97,7 @@ int UserInterface::get_choice()
 
 void UserInterface::print_message( const std::string& message )
 {
-	std::cout<<"\n Your en/decrypted message :\n\t";
+	std::cout<<"\n Your en/decrypted message :\n";
 	std::cout<<message;
 	std::cout<< " \n\n [1]. Back"<<std::endl;
 	std::cout<< "\n Selection: ";

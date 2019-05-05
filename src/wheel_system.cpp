@@ -7,7 +7,6 @@
 
 #include <sstream>
 #include <fstream>
-#include <iostream>
 #include "wheel_system.hpp"
 
 namespace lm {
